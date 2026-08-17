@@ -1,0 +1,112 @@
+table _Measures
+	lineageTag: a766b4c0-bf6a-4dc5-91e4-cc852f64ee55
+
+	measure 'Total Orders' = ```
+			
+			    CALCULATE(
+			        DISTINCTCOUNT(Orders[order_id]),
+			        CROSSFILTER(Orders[order_id], OrderItems[order_id], BOTH),
+			        CROSSFILTER(Orders[order_id], Reviews[order_id], BOTH)
+			    )
+			```
+		formatString: 0.0
+		lineageTag: dab0a3d0-8a1c-4339-ba02-6a341e93837f
+
+		changedProperty = IsHidden
+
+	measure 'Total Customers' = DISTINCTCOUNT(Customers[customer_unique_id])
+		formatString: 0
+		lineageTag: cdc2c10d-96bc-47b1-a2b1-e98bdded0764
+
+		changedProperty = IsHidden
+
+	measure 'Total Revenue' = SUM(OrderItems[price])
+		formatString: 0.0
+		lineageTag: d2783bc7-ed2a-4332-85e6-acdc59e09ca8
+
+		changedProperty = IsHidden
+
+	measure 'Average Order Value' = DIVIDE([Total Revenue], [Total Orders])
+		lineageTag: df4f13b5-0e74-43e0-945d-00dec6c5608b
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Delivered Orders' = CALCULATE([Total Orders], Orders[Is_Delivered] = 1)
+		formatString: 0
+		lineageTag: fcbc49ec-07bb-417e-b2f6-7fb2d8e717ac
+
+		changedProperty = IsHidden
+
+	measure 'On-Time Delivery Rate' = ```
+			
+			    DIVIDE(
+			        CALCULATE(
+			            [Total Orders],
+			            FILTER(
+			                Orders,
+			                Orders[Is_Delivered] = 1 &&
+			                Orders[order_delivered_customer_date] <= Orders[order_estimated_delivery_date]
+			            )
+			        ),
+			        [Delivered Orders]
+			    )
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 9c8fce4d-0795-4f52-9183-fee7b9cbcaa7
+
+		changedProperty = IsHidden
+
+	measure 'Avg Review Score' = AVERAGE(Reviews[review_score])
+		lineageTag: 6c2ede59-94d8-4e19-8740-53e21cddd57f
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Payment Value' = SUM(Payments[payment_value])
+		lineageTag: a66176ea-5292-4fb6-9e70-c4f2b3caa3e7
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue MTD' = TOTALMTD([Total Revenue], DateTable[Date])
+		lineageTag: aa47514e-f029-428b-921f-d0610fe655f0
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue YTD' = TOTALYTD([Total Revenue], DateTable[Date])
+		lineageTag: 670f9b13-ffd4-463f-8e57-797b7a6d54d1
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Column1
+		dataType: string
+		isHidden
+		lineageTag: 7c8b1fb4-3024-4a77-9e13-377e63f8d6c6
+		summarizeBy: none
+		sourceColumn: Column1
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Measures = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}})
+				in
+				    #"Changed Type"
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Table
+

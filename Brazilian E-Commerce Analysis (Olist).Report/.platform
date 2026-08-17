@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Brazilian E-Commerce Analysis (Olist)"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "e278088d-0b16-4fc4-87a4-9e5fe3cb3dc7"
+  }
+}

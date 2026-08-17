@@ -1,0 +1,53 @@
+table Geolocation
+	lineageTag: 275618f2-6d0f-4e0e-848f-157f25b4dbe9
+
+	column geolocation_zip_code_prefix
+		dataType: int64
+		formatString: 0
+		lineageTag: 6ef44e09-d3fd-473e-90b2-49f023a8f372
+		summarizeBy: none
+		sourceColumn: geolocation_zip_code_prefix
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column avg_lat
+		dataType: double
+		lineageTag: 4e3a2d25-ee1f-4adf-8e71-700e4ec9cc32
+		summarizeBy: none
+		sourceColumn: avg_lat
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column avg_lng
+		dataType: double
+		lineageTag: 44d63b1b-a2c0-49e1-a2ca-95f3adb71130
+		summarizeBy: none
+		sourceColumn: avg_lng
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Geolocation = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\Sangram Bharat\OneDrive\personal\Project Portfolio\Brazilian E-Commerce Analysis (Olist)\olist_geolocation_dataset.csv"),[Delimiter=",", Columns=5, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"geolocation_zip_code_prefix", Int64.Type}, {"geolocation_lat", type number}, {"geolocation_lng", type number}, {"geolocation_city", type text}, {"geolocation_state", type text}}),
+				    #"Grouped Rows" = Table.Group(#"Changed Type", {"geolocation_zip_code_prefix"}, {{"avg_lat", each List.Average([geolocation_lat]), type nullable number}, {"avg_lng", each List.Average([geolocation_lng]), type nullable number}})
+				in
+				    #"Grouped Rows"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,116 @@
+table OrderItems
+	lineageTag: 22c587ba-9d1e-4e71-b70b-c854d3caeddd
+
+	column order_id
+		dataType: string
+		lineageTag: b2ce6d96-a0a2-4e19-a160-070434a2f245
+		summarizeBy: none
+		sourceColumn: order_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_item_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 98c83eef-391d-4d08-9a3e-0f44f7d06b20
+		summarizeBy: sum
+		sourceColumn: order_item_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_id
+		dataType: string
+		lineageTag: 12ac8352-7b24-45a1-ac4e-072c2484d643
+		summarizeBy: none
+		sourceColumn: product_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column seller_id
+		dataType: string
+		lineageTag: 547014a0-3cf0-4f66-8994-e9fdf6b80e5b
+		summarizeBy: none
+		sourceColumn: seller_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column shipping_limit_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 91c307ea-a4b8-45ba-b6ff-337ac0be480f
+		summarizeBy: none
+		sourceColumn: shipping_limit_date
+
+		variation Variation
+			isDefault
+			relationship: 61758be4-bdc2-48fd-ac09-66683c267e81
+			defaultHierarchy: LocalDateTable_24d01065-c3ff-4281-b656-f9fbf4be5864.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column price
+		dataType: double
+		lineageTag: 9325d499-9c1d-4595-a68e-9e971468943b
+		summarizeBy: sum
+		sourceColumn: price
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column freight_value
+		dataType: double
+		lineageTag: ec2ca155-3bbb-4a79-8064-e2cedf490da7
+		summarizeBy: sum
+		sourceColumn: freight_value
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	hierarchy 'order_id Hierarchy'
+		lineageTag: bfa4babe-7f45-47b5-ac81-e5d415fafe3f
+
+		level order_id
+			lineageTag: 6084a37c-7231-409d-a70e-881e56c4823e
+			column: order_id
+
+		changedProperty = IsHidden
+
+	hierarchy 'order_id Hierarchy 2'
+		lineageTag: aeafd96c-4660-4d60-add6-553838e33ae4
+
+		level order_id
+			lineageTag: 1ae415e0-e935-4867-be4b-9f017de3f892
+			column: order_id
+
+		changedProperty = IsHidden
+
+	partition OrderItems = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\Sangram Bharat\OneDrive\personal\Project Portfolio\Brazilian E-Commerce Analysis (Olist)\olist_order_items_dataset.csv"),[Delimiter=",", Columns=7, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"order_id", type text}, {"order_item_id", Int64.Type}, {"product_id", type text}, {"seller_id", type text}, {"shipping_limit_date", type datetime}, {"price", type number}, {"freight_value", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

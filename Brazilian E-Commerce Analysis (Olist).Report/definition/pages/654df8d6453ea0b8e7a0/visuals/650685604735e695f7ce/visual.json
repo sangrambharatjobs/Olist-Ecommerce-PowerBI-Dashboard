@@ -1,0 +1,37 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "650685604735e695f7ce",
+  "position": {
+    "x": 995.38571769763553,
+    "y": 643.20993551468837,
+    "z": 7000,
+    "height": 77.038452352519712,
+    "width": 284.91999044662049,
+    "tabOrder": 7000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Revenue grew steadily through 2017–2018, with a clear spike around Black Friday (Nov 2017).",
+                    "textStyle": {
+                      "fontStyle": "italic",
+                      "fontSize": "11pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

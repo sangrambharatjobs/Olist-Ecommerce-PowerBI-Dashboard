@@ -1,0 +1,58 @@
+table Sellers
+	lineageTag: 647d8a12-2109-456f-9b16-d4008e044a6e
+
+	column seller_id
+		dataType: string
+		lineageTag: d8cf50ba-35c5-4cfd-bc5b-b577181a383a
+		summarizeBy: none
+		sourceColumn: seller_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column seller_zip_code_prefix
+		dataType: int64
+		formatString: 0
+		lineageTag: 7513ab46-9bc3-4085-b9b8-b986f8f09f64
+		summarizeBy: none
+		sourceColumn: seller_zip_code_prefix
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column seller_city
+		dataType: string
+		lineageTag: 8b151742-cfff-4472-853d-a54eef716dbd
+		summarizeBy: none
+		sourceColumn: seller_city
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column seller_state
+		dataType: string
+		lineageTag: 581e2f19-de4c-407a-8478-a12a3f331fd1
+		summarizeBy: none
+		sourceColumn: seller_state
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Sellers = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\Sangram Bharat\OneDrive\personal\Project Portfolio\Brazilian E-Commerce Analysis (Olist)\olist_sellers_dataset.csv"),[Delimiter=",", Columns=4, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"seller_id", type text}, {"seller_zip_code_prefix", Int64.Type}, {"seller_city", type text}, {"seller_state", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

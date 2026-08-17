@@ -1,0 +1,33 @@
+table DateTable
+	lineageTag: e93cc6b0-f69f-403f-b95e-0308f302c699
+	dataCategory: Time
+
+	column Date
+		isKey
+		formatString: General Date
+		lineageTag: e3844a2a-83f1-4960-9471-40c05c068326
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year = YEAR(DateTable[Date])
+		formatString: 0
+		lineageTag: 4d782e6f-6c23-4308-af19-cc4b9e756564
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthName = FORMAT(DateTable[Date], "MMMM")
+		lineageTag: 339dafb2-4b3d-4370-b6c9-68a407d6b6fe
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DateTable = calculated
+		mode: import
+		source = CALENDAR(DATE(2016,1,1), DATE(2018,12,31))
+
+	annotation PBI_Id = a6de2ddf2c7d429aa82a9b3113bd046b
+

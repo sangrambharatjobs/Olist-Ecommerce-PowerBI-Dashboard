@@ -1,0 +1,12 @@
+expression CategoryTranslation =
+		let
+		    Source = Csv.Document(File.Contents("C:\Users\Sangram Bharat\OneDrive\personal\Project Portfolio\Brazilian E-Commerce Analysis (Olist)\product_category_name_translation.csv"),[Delimiter=",", Columns=2, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+		    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}, {"Column2", type text}})
+		in
+		    #"Changed Type"
+	lineageTag: f518c526-fbae-4d14-bd2e-5800b1bc2b17
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

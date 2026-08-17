@@ -1,0 +1,128 @@
+table Products
+	lineageTag: 733b4181-94ef-4ed0-a5c2-d079d230f519
+
+	column product_id
+		dataType: string
+		lineageTag: 2a377afa-46f6-4772-a342-4c4e5343a1ef
+		summarizeBy: none
+		sourceColumn: product_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_category_name
+		dataType: string
+		lineageTag: e6062716-b8df-44c3-9dd6-c13b6951689b
+		summarizeBy: none
+		sourceColumn: product_category_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_category_name_english
+		dataType: string
+		lineageTag: 401f8aa9-189c-40bb-b440-84001cd9fbf5
+		summarizeBy: none
+		sourceColumn: product_category_name_english
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_name_lenght
+		dataType: int64
+		formatString: 0
+		lineageTag: e1a3d8f4-20e8-4e2a-984d-51f8f26a091e
+		summarizeBy: none
+		sourceColumn: product_name_lenght
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_description_lenght
+		dataType: int64
+		formatString: 0
+		lineageTag: 8263ed6c-140e-4c39-9cea-bc36537a31c3
+		summarizeBy: none
+		sourceColumn: product_description_lenght
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_photos_qty
+		dataType: int64
+		formatString: 0
+		lineageTag: aebdb99b-cb0a-4a16-8026-fee6245402e7
+		summarizeBy: none
+		sourceColumn: product_photos_qty
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_weight_g
+		dataType: int64
+		formatString: 0
+		lineageTag: 321a8fac-9c9f-4f71-8cd6-f74c82e39897
+		summarizeBy: none
+		sourceColumn: product_weight_g
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_length_cm
+		dataType: int64
+		formatString: 0
+		lineageTag: 051c046a-a8b1-49b8-b4a4-9ada80cc0fc5
+		summarizeBy: none
+		sourceColumn: product_length_cm
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_height_cm
+		dataType: int64
+		formatString: 0
+		lineageTag: 3b3b696f-2561-4152-95fc-c925d3bdf468
+		summarizeBy: none
+		sourceColumn: product_height_cm
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_width_cm
+		dataType: int64
+		formatString: 0
+		lineageTag: bf470cb6-3f4a-4dd2-bf2b-3aab9a173018
+		summarizeBy: none
+		sourceColumn: product_width_cm
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Products = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\Sangram Bharat\OneDrive\personal\Project Portfolio\Brazilian E-Commerce Analysis (Olist)\olist_products_dataset.csv"),[Delimiter=",", Columns=9, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"product_id", type text}, {"product_category_name", type text}, {"product_name_lenght", Int64.Type}, {"product_description_lenght", Int64.Type}, {"product_photos_qty", Int64.Type}, {"product_weight_g", Int64.Type}, {"product_length_cm", Int64.Type}, {"product_height_cm", Int64.Type}, {"product_width_cm", Int64.Type}}),
+				    #"Merged Queries" = Table.NestedJoin(#"Changed Type", {"product_category_name"}, CategoryTranslation, {"Column1"}, "CategoryTranslation", JoinKind.LeftOuter),
+				    #"Expanded CategoryTranslation" = Table.ExpandTableColumn(#"Merged Queries", "CategoryTranslation", {"Column2"}, {"CategoryTranslation.Column2"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Expanded CategoryTranslation",{{"CategoryTranslation.Column2", "product_category_name_english"}}),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Renamed Columns",{"product_id", "product_category_name", "product_category_name_english", "product_name_lenght", "product_description_lenght", "product_photos_qty", "product_weight_g", "product_length_cm", "product_height_cm", "product_width_cm"})
+				in
+				    #"Reordered Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

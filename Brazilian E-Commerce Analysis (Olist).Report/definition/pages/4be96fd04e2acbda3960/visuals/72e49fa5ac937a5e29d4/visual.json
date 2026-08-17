@@ -1,0 +1,37 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "72e49fa5ac937a5e29d4",
+  "position": {
+    "x": 980.71172677334607,
+    "y": 644.43276809171243,
+    "z": 2000,
+    "height": 75.815619775495577,
+    "width": 299.59398137090994,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Revenue is heavily concentrated in southeast Brazil — São Paulo alone accounts for the largest share.",
+                    "textStyle": {
+                      "fontStyle": "italic",
+                      "fontSize": "11pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

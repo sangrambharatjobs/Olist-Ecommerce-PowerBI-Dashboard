@@ -1,0 +1,100 @@
+table Reviews
+	lineageTag: e8803a79-71c0-4fd0-bef5-fac8fef61791
+
+	column review_id
+		dataType: string
+		lineageTag: 6c777695-b48a-4b3a-b414-c6e41a628fed
+		summarizeBy: none
+		sourceColumn: review_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_id
+		dataType: string
+		lineageTag: 24a7aff6-6ae8-41ce-9f95-f8ba1e59eed4
+		summarizeBy: none
+		sourceColumn: order_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column review_score
+		dataType: int64
+		formatString: 0
+		lineageTag: 23d00526-969f-4eeb-bc4f-94a5ab35e7ae
+		summarizeBy: sum
+		sourceColumn: review_score
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column review_comment_title
+		dataType: string
+		lineageTag: 87a1102c-503f-43c9-b0d8-216275e5414d
+		summarizeBy: none
+		sourceColumn: review_comment_title
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column review_comment_message
+		dataType: string
+		lineageTag: 8b3cae35-ece4-4d8d-afd2-e0bf7e11fbc9
+		summarizeBy: none
+		sourceColumn: review_comment_message
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column review_creation_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: efee52f5-b5d2-408a-97a8-cf58afd5c439
+		summarizeBy: none
+		sourceColumn: review_creation_date
+
+		variation Variation
+			isDefault
+			relationship: 5a3d14e7-95d6-44b6-a4af-28f287bfba28
+			defaultHierarchy: LocalDateTable_2ae231db-40c3-4e3b-bced-4d6d8f558668.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column review_answer_timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 16e27e03-cc27-4f7f-aa95-3c18d63352aa
+		summarizeBy: none
+		sourceColumn: review_answer_timestamp
+
+		variation Variation
+			isDefault
+			relationship: f54cee0d-3b31-47a5-908d-adebdc520d63
+			defaultHierarchy: LocalDateTable_2e2913ab-2921-4b16-becf-24d542322d9f.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Reviews = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\Sangram Bharat\OneDrive\personal\Project Portfolio\Brazilian E-Commerce Analysis (Olist)\olist_order_reviews_dataset.csv"),[Delimiter=",", Columns=7, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"review_id", type text}, {"order_id", type text}, {"review_score", Int64.Type}, {"review_comment_title", type text}, {"review_comment_message", type text}, {"review_creation_date", type datetime}, {"review_answer_timestamp", type datetime}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

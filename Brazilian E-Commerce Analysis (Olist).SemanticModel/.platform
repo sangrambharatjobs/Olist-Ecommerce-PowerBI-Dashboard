@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Brazilian E-Commerce Analysis (Olist)"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "97a47cc4-2ffa-4938-8c20-2f68a1faa5d6"
+  }
+}
